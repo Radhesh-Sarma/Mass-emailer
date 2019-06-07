@@ -5,8 +5,6 @@ from oauth2client import file, client, tools
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
-from email.mime.image import MIMEImage
-from email.mime.audio import MIMEAudio
 from email.encoders import encode_base64
 import base64
 import mimetypes
@@ -74,7 +72,7 @@ def create_message_with_attachment(
         msg = MIMEBase(main_type, sub_type)
         msg.set_payload(fp.read())
         fp.close()
-    
+
     filename = os.path.basename(file)
     msg.add_header('Content-Disposition', 'attachment', filename=filename)
     encode_base64(msg)
@@ -82,7 +80,7 @@ def create_message_with_attachment(
 
 
 
-    
+
     return {'raw': base64.urlsafe_b64encode(message.as_string().encode())}
 
 
@@ -98,8 +96,8 @@ def send_message(service, user_id, message):
     Returns:
         Sent Message.
     """
-    
-    message['raw'] = message['raw'].decode('utf-8')    
+
+    message['raw'] = message['raw'].decode('utf-8')
     try:
         message = (service.users().messages().send(userId=user_id, body=message).execute())
         print('Message Id: %s' % message['id'])
@@ -126,12 +124,17 @@ def send_mail(mail):
     reciever = mail['reciever']
     subject = mail['subject']
     msg_text = mail['body']
-    attach = mail['file']
+    attach=mail['file']
+    if(attach=='0'):
+        attach=None
 
     #msg = create_message(sender, reciever, subject, msg_text)
-    if (attach != None) : 
-        msg = create_message_with_attachment(sender, reciever, subject, msg_text, attach) 
+    if (attach != None) :
+        msg = create_message_with_attachment(sender, reciever, subject, msg_text, attach)
         try :
-            send_message(service, "me", msg)
-        except :
-            print ('ERROR : ' + mail[reciever])
+        	send_message(service, "me", msg)
+       	except :
+       		print ('ERROR : ' + mail[reciever])
+    else:
+        msg = create_message(sender, reciever, subject, msg_text)
+        send_message(service, "me", msg)
