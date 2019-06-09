@@ -1,21 +1,15 @@
 import tkinter
 from tkinter import *
-window=tkinter.Tk(screenName="Bulk Email", className='Tk', useTk=1)
+window=tkinter.Tk()
 window.title("Bulk Email")
 window.config(width=640, height=480)
 
 from tkinter.filedialog import askopenfilename
 
-
 def attachmentSelect():
-    attachmentBox.delete(0,END)
-    if var.get()==0:
-        attachmentBox.config(state=DISABLED)
-    else:
-        attachmentBox.config(state=NORMAL)
-        Tk().withdraw() 
-        filename = askopenfilename()
-        attachmentBox.insert(0, filename)
+    Tk().withdraw() 
+    filename = askopenfilename()
+    print(filename)
 
 
 
@@ -26,9 +20,9 @@ batchSelectLabel.pack()
 batchSelectLabel.place(height=50, relx=0.1)
 
 #Subject Label
-subjectLabel=tkinter.Label(window, text="Type Subject")
-subjectLabel.pack()
-subjectLabel.place(height=50, relx=0.5)
+batchSelectLabel=tkinter.Label(window, text="Type Subject")
+batchSelectLabel.pack()
+batchSelectLabel.place(height=50, relx=0.5)
 
 #ListBox
 batchList=Listbox(window)
@@ -48,15 +42,14 @@ messageLabel.pack()
 messageLabel.place(height=50, relx=0.1, rely=0.35)
 
 #Attachment checkbox
-var=tkinter.IntVar()
-attachmentCheckbox=tkinter.Checkbutton(window, text="Include Attachment",variable=var, command=lambda:attachmentSelect())
-attachmentCheckbox.pack()
-attachmentCheckbox.place(relx=0.5, rely=0.15)
+messageLabel=tkinter.Checkbutton(window, text="Include Attachment", command=lambda:attachmentSelect())
+messageLabel.pack()
+messageLabel.place(relx=0.5, rely=0.15)
 
 #Attachment Label
-attachmentLabel=tkinter.Label(window, text="Attachment path")
-attachmentLabel.pack()
-attachmentLabel.place(relx=0.5, rely=0.22)
+messageLabel=tkinter.Label(window, text="Attachment path")
+messageLabel.pack()
+messageLabel.place(relx=0.5, rely=0.22)
 
 #Attachment Entry Box
 attachmentBox = Entry(window, exportselection=0, width=50)
@@ -80,15 +73,13 @@ def extractText():
     batch = batchList.curselection()
     filename=str()
     if batch[0]==0:
-        filename="batch0.dat"
+        filename="tempMessage.dat"
     elif(batch[0]==1):
-        filename="batch1.dat"
+        filename="2018"
     tempFile=open(filename,"w")
     content=TextArea.get("1.0","end-1c")
     subject=subjectBox.get()
-    attachmentStatus=var.get()
-    attachmentPath=attachmentBox.get()
-    tempFile.write(subject + "\n" + str(attachmentStatus)+ "\n"+ attachmentPath+"\n"+content)
+    tempFile.write(subject + "\n" +content)
     tempFile.close()
 
 
