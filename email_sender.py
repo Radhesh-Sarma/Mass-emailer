@@ -1,6 +1,8 @@
-from __future__ import print_function
 from googleapiclient.discovery import build
-from httplib2 import Http
+from email import encoders
+import httplib2
+import smtplib
+import mimetypes
 from oauth2client import file, client, tools
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
@@ -8,9 +10,11 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.audio import MIMEAudio
 from email.mime.base import MIMEBase
 from email.encoders import encode_base64
+from email.mime.application import MIMEApplication
+from email.message import Message
 import base64
-import mimetypes
 import os
+from apiclient import errors, discovery
 
 def create_message(sender, to, subject, message_text):
     """Create a message for an email.
@@ -28,7 +32,10 @@ def create_message(sender, to, subject, message_text):
     message['to'] = to
     message['from'] = sender
     message['subject'] = subject
-    return {'raw': base64.urlsafe_b64encode(message.as_string())}
+    raw_message_no_attachment = base64.urlsafe_b64encode(message.as_bytes())
+    raw_message_no_attachment = raw_message_no_attachment.decode()
+    body = {'raw': raw_message_no_attachment}
+    return body
 
 def create_message_with_attachment(
     sender, to, subject, message_text, file):
@@ -58,7 +65,7 @@ def create_message_with_attachment(
         content_type = 'application/octet-stream'
     main_type, sub_type = content_type.split('/', 1)
     if main_type == 'text':
-        fp = open(file, 'rb')
+        fp = open(file, 'r')
         msg = MIMEText(fp.read(), _subtype=sub_type)
         fp.close()
     elif main_type == 'image':
@@ -69,23 +76,26 @@ def create_message_with_attachment(
         fp = open(file, 'rb')
         msg = MIMEAudio(fp.read(), _subtype=sub_type)
         fp.close()
+    elif main_type == 'application' and sub_type == 'pdf':
+         fp = open(file,'rb')
+         msg = MIMEApplication(temp.read(),_sub_type)
+         temp.close()
     else:
-        fp = open(file, 'rb')
         msg = MIMEBase(main_type, sub_type)
+        fp = open(file, 'rb')
         msg.set_payload(fp.read())
         fp.close()
 
+    encoders.encode_base64(msg)
     filename = os.path.basename(file)
     msg.add_header('Content-Disposition', 'attachment', filename=filename)
-    encode_base64(msg)
     message.attach(msg)
 
-
-
-
-    return {'raw': base64.urlsafe_b64encode(message.as_string().encode())}
-
-
+    message_as_bytes = message.as_bytes()
+    message_as_base64 = base64.urlsafe_b64encode(message_as_bytes)
+    raw = message_as_base64.decode()
+    
+    return {'raw': raw}
 def send_message(service, user_id, message):
     """Send an email message.
 
@@ -99,13 +109,13 @@ def send_message(service, user_id, message):
         Sent Message.
     """
 
-    message['raw'] = message['raw'].decode('utf-8')
+   
     try:
-        message = (service.users().messages().send(userId=user_id, body=message).execute())
-        print('Message Id: %s' % message['id'])
+        message_sent= (service.users().messages().send(userId=user_id, body=message).execute())
+        print('Message Id: %s' % message_sent['id'])
         return message
-    except :
-        print('An error occurred')
+    except errors.HttpError as error:
+        print('An error occurred: {error}')
 
 
 
@@ -120,7 +130,10 @@ def send_mail(mail):
     if not creds or creds.invalid:
         flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
         creds = tools.run_flow(flow, store)
-    service = build('gmail', 'v1', http=creds.authorize(Http()))
+
+    http=httplib2.Http()
+    http=creds.authorize(http)
+    service = discovery.build('gmail', 'v1', http=http)
 
     sender = mail['sender']
     reciever = mail['reciever']
