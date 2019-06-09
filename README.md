@@ -12,6 +12,6 @@
 4) Set mail info in ```main.py```
 
 5) install required packages: <br>
-```$ pip install --upgrade google-api-python-client oauth2client```
+```$ pip3 install --upgrade google-api-python-client```
 
-6) Run: ```$ python main.py```
+6) Run: ```$ python3 main.py```
