@@ -1,12 +1,31 @@
+#this script sets the receiver emails,subject,body,attachments of the email and sends the email using the credentials provided 
+
+
 from email_sender import send_mail
+tempFile = open("tempData.dat","r")
+
 mail = {}
-mail['sender'] = 'f20170886@hyderabad.bits-pilani.ac.in'
-mail['reciever'] = 'chinmaygupta3@gmail.com,f20170130@goa.bits-pilani.ac.in'
-mail['subject'] = 'DEMO SUBJECT'
-mail['body'] = 'demo body'
-x=input("Enter path to attach file \n Enter 0 if you dont want to attach a file")
-mail['file']=x
+mail['sender'] = 'chinmaygupta3@gmail.com'
+#Please make sure that the above email file corresponds to the same email as in credentials.json
+
+batchSelect = tempFile.readline().split('\n')
+batch=open(str(batchSelect[0]),"r")
+mail['reciever'] = (batch.read().split('\n'))[0]
+
+subject=tempFile.readline().split('\n')
+mail['subject'] = (str(subject[0]))
+
+attachmentStatus=str((tempFile.readline().split('\n'))[0])
+if attachmentStatus==0:
+    pass
+else:
+    attachmentPath=str((tempFile.readline().split('\n'))[0])
+    mail['file']=attachmentPath
+
+body=str(tempFile.read())
+
+mail['body'] = body
+tempFile.close()
 
 
-#write sender email,receiver email,subject,body, path of file attachment above'
 send_mail(mail)

@@ -14,7 +14,7 @@ from email.mime.application import MIMEApplication
 from email.message import Message
 import base64
 import os
-from apiclient import errors, discovery
+from apiclient import errors, discovery #needed for gmail service
 
 def create_message(sender, to, subject, message_text):
     """Create a message for an email.
@@ -51,6 +51,12 @@ def create_message_with_attachment(
       Returns:
         An object containing a base64url encoded email object.
     """
+
+
+	 #-----About MimeTypes:
+    	 # It tells gmail which application it should use to read the attachement (it acts like an 		   extension for windows).
+   	 # If you dont provide it, you just wont be able to read the attachement (eg. a text) 		   within gmail. You'll have to download it to read it (windows will know how to read 		   it with it's extension).
+	
     message = MIMEMultipart()
     message['to'] = to
     message['from'] = sender
@@ -60,7 +66,8 @@ def create_message_with_attachment(
     message.attach(msg)
 
     content_type, encoding = mimetypes.guess_type(file)
-
+	#If the extension is not recognized it will return: (None, None)
+    # If it's an .mp3, it will return: (audio/mp3, None) (None is for the encoding)
     if content_type is None or encoding is not None:
         content_type = 'application/octet-stream'
     main_type, sub_type = content_type.split('/', 1)

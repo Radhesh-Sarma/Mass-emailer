@@ -11,7 +11,10 @@
 
 4) Set mail info in ```main.py```
 
-5) install required packages: <br>
-```$ pip3 install --upgrade google-api-python-client```
+5) Make run.sh executable
 
-6) Run: ```$ python3 main.py```
+6) install required packages: <br>
+```$ pip3 install --upgrade google-api-python-client```
+```$ sudo apt-get install python3-tk ```
+	
+7) Run: ```$ ./run.sh```
