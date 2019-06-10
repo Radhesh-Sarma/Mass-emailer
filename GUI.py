@@ -1,5 +1,7 @@
 import tkinter
 from tkinter import *
+#from sys import exit
+import os
 window=tkinter.Tk()
 window.title("Bulk Email")
 window.config(width=640, height=480)
@@ -86,8 +88,7 @@ def extractText():
     attachmentPath=attachmentBox.get()
     tempFile.write(str(batch[0])+"\n"+subject + "\n" + str(attachmentStatus)+ "\n"+ attachmentPath+"\n"+content)
     tempFile.close()
-    exit()
-
+    os._exit(0)
 
 #Button
 btnFrame=Frame(window)
