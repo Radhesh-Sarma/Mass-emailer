@@ -78,17 +78,13 @@ TextArea.place(height=200, width=500, relx=0.1, rely=0.45)
 #Creating temp file
 def extractText():
     batch = batchList.curselection()
-    filename=str()
-    if batch[0]==0:
-        filename="batch0.dat"
-    elif(batch[0]==1):
-        filename="batch1.dat"
+    filename="tempData.dat"
     tempFile=open(filename,"w")
     content=TextArea.get("1.0","end-1c")
     subject=subjectBox.get()
     attachmentStatus=var.get()
     attachmentPath=attachmentBox.get()
-    tempFile.write(subject + "\n" + str(attachmentStatus)+ "\n"+ attachmentPath+"\n"+content)
+    tempFile.write(str(batch[0])+"\n"+subject + "\n" + str(attachmentStatus)+ "\n"+ attachmentPath+"\n"+content)
     tempFile.close()
 
 
