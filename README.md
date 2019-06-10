@@ -14,6 +14,6 @@
 5) Make run.sh executable
 
 6) install required packages: <br>
-```$ sudo apt-get install python3-tk && pip3 install --upgrade google-api-python-client \n```
+```$ sudo apt-get install python3-tk && pip3 install --upgrade google-api-python-client ```
 	
 7) Run: ```$ ./run.sh```
