@@ -128,8 +128,12 @@ def send_message(service, user_id, message):
 
 
 
+
 # If modifying these scopes, delete the file token.json.
 SCOPES = 'https://www.googleapis.com/auth/gmail.send'
+
+
+
 
 def send_mail(mail):
     store = file.Storage('token.json')

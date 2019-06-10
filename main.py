@@ -5,7 +5,7 @@ from email_sender import send_mail
 tempFile = open("tempData.dat","r")
 
 mail = {}
-mail['sender'] = 'chinmaygupta3@gmail.com'
+mail['sender'] = 'Your Email'
 #Please make sure that the above email file corresponds to the same email as in credentials.json
 
 batchSelect = tempFile.readline().split('\n')
