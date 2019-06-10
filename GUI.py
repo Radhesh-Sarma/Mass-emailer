@@ -86,6 +86,7 @@ def extractText():
     attachmentPath=attachmentBox.get()
     tempFile.write(str(batch[0])+"\n"+subject + "\n" + str(attachmentStatus)+ "\n"+ attachmentPath+"\n"+content)
     tempFile.close()
+    exit()
 
 
 #Button
