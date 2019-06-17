@@ -83,10 +83,6 @@ def create_message_with_attachment(
         fp = open(file, 'rb')
         msg = MIMEAudio(fp.read(), _subtype=sub_type)
         fp.close()
-    elif main_type == 'application' and sub_type == 'pdf':
-         fp = open(file,'rb')
-         msg = MIMEApplication(temp.read(),_sub_type)
-         temp.close()
     else:
         msg = MIMEBase(main_type, sub_type)
         fp = open(file, 'rb')
