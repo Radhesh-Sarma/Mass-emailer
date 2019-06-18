@@ -16,16 +16,26 @@ subject=tempFile.readline().split('\n')
 mail['subject'] = (str(subject[0]))
 
 attachmentStatus=str((tempFile.readline().split('\n'))[0])
-if attachmentStatus==0:
-    pass
-else:
+if attachmentStatus==1:
     attachmentPath=str((tempFile.readline().split('\n'))[0])
     mail['file']=attachmentPath
+else:
+    mail['file']='0'
 
 body=str(tempFile.read())
 
 mail['body'] = body
 tempFile.close()
+
+HTMLbodyText = "Hi"
+for charReader in range(0, len(body)):
+    if body[charReader]!='\n':
+        HTMLbodyText=HTMLbodyText+body[charReader]
+    else:
+        HTMLbodyText=HTMLbodyText+"<br>"
+
+mail['body']=HTMLbodyText
+        
 
 
 send_mail(mail)
