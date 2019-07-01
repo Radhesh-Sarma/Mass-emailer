@@ -5,7 +5,7 @@ from email_sender import send_mail
 tempFile = open("tempData.dat","r")
 
 mail = {}
-mail['sender'] = 'Your Email'
+mail['sender'] = 'chinmaygupta3@gmail.com'
 #Please make sure that the above email file corresponds to the same email as in credentials.json
 
 batchSelect = tempFile.readline().split('\n')
@@ -16,7 +16,7 @@ subject=tempFile.readline().split('\n')
 mail['subject'] = (str(subject[0]))
 
 attachmentStatus=str((tempFile.readline().split('\n'))[0])
-if attachmentStatus==1:
+if attachmentStatus=='1':
     attachmentPath=str((tempFile.readline().split('\n'))[0])
     mail['file']=attachmentPath
 else:
@@ -24,10 +24,10 @@ else:
 
 body=str(tempFile.read())
 
-mail['body'] = body
+#mail['body'] = body
 tempFile.close()
 
-HTMLbodyText = "Hi"
+HTMLbodyText = ""
 for charReader in range(0, len(body)):
     if body[charReader]!='\n':
         HTMLbodyText=HTMLbodyText+body[charReader]
